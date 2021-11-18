@@ -2,7 +2,7 @@
 
 IMAGE := python-hydra
 ORG := rstms
-VERSION := 1.0.0
+VERSION := 1.0.1
 
 BASE_IMAGE = python:3.10.0-slim-buster
 PYTHON_VERSIONS := '3.6 3.7 3.8 3.9 3.10'
