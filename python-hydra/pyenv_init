@@ -1,0 +1,9 @@
+# shell initialization for pyenv
+export PYENV_ROOT=${PYENV_ROOT:-${HOME}/.pyenv}
+if [ -z "${PYENV_INIT}" ]; then
+  export PYENV_INIT=1
+  (echo "${PATH}" | tr : '\n' | grep -q "^${PYENV_ROOT}/bin$") || export PATH="${PYENV_ROOT}/bin:${PATH}"
+  (echo "${PATH}" | tr : '\n' | grep -q "^${PYENV_ROOT}/shims$") || eval "$(pyenv init --path)"
+  [ -n "${PYENV_SHELL}" ] || eval "$(pyenv init -)"
+  [ -n "${PYENV_VIRTUALENV_INIT}" ] || eval "$(pyenv virtualenv-init -)"
+fi

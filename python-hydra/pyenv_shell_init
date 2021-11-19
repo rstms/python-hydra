@@ -1,8 +1,0 @@
-# shell initialization for pyenv
-if (echo $PATH | grep -vq "$HOME/.pyenv/bin"); then
-  export PATH="$HOME/.pyenv/bin:$PATH"
-fi
-if [ ! -n "$PYENV_SHELL" ]; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi

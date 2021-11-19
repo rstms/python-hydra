@@ -2,7 +2,7 @@
 
 IMAGE := python-hydra
 ORG := rstms
-VERSION := 1.0.1
+VERSION := 1.0.2
 
 BASE_IMAGE = python:3.10.0-slim-buster
 PYTHON_VERSIONS := '3.6 3.7 3.8 3.9 3.10'
@@ -32,8 +32,9 @@ publish:
 	$(if $(wildcard ~/.docker/config.json),docker login,$(error docker-publish failed; ~/.docker/config.json required))
 	$(foreach DOCKERTAG,$(VERSION) latest,$(call tag_and_push,$(IMAGE):latest,$(ORG),$(IMAGE),$(DOCKERTAG));)
 
+CMD ?= /bin/bash -l
 run:
-	$(call DOCKER_RUN,-it,$(IMAGE):latest) /bin/bash
+	$(call DOCKER_RUN,-it,$(IMAGE):latest) $(CMD)
 
 TEST_CMD := $(foreach PV,$(PYTHON_VERSIONS),python$(PV) --version &&)
 

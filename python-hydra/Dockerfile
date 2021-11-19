@@ -30,7 +30,6 @@ RUN \
   libffi-dev \
   liblzma-dev 
 
-
 ENV USER=hydra
 
 RUN \
@@ -43,22 +42,19 @@ WORKDIR /home/${USER}
 
 ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
-ENV PYENV_ROOT=/home/${USER}/.pyenv
+ENV PYENV_ROOT="/home/${USER}/.pyenv"
 ENV PATH="${PYENV_ROOT}/bin:${PATH}"
-ENV PYENV_INIT_SCRIPT=/home/${USER}/.pyenv_init
 
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 RUN pyenv update
 
 RUN \
-  echo 'export PATH="$HOME/.pyenv/bin:$PATH"' > $PYENV_INIT_SCRIPT && \
-  echo 'eval "$(pyenv init --path)"' >> $PYENV_INIT_SCRIPT && \
-  echo 'eval "$(pyenv init -)"' >> $PYENV_INIT_SCRIPT && \
-  echo 'eval "$(pyenv virtualenv-init -)"' >> $PYENV_INIT_SCRIPT && \
-  echo ". $PYENV_INIT_SCRIPT" >> /home/${USER}/.profile
-
-RUN \
   for VERSION in $PYTHON_VERSIONS; do (pyenv install -l|grep "^ *${VERSION}\."|tail -1); done | \
     xargs -n 1 -I VERSION pyenv install VERSION
 
-RUN pyenv versions
+ENV PYENV_INIT_SCRIPT="/home/${USER}/.pyenv_init"
+COPY pyenv_init $PYENV_INIT_SCRIPT
+RUN echo ". $PYENV_INIT_SCRIPT" >> .profile
+RUN echo ". $PYENV_INIT_SCRIPT" >> .bashrc
+
+RUN pyenv versions --bare | sort -Vr >.python-version
